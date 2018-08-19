@@ -241,12 +241,12 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 
 	# Remove Nginx site
 	echo "Clean up Nginx.."
-	if [[ -e $nginx_sites_enabled/$SITE ]] ; then
-		sudo rm -f $nginx_sites_enabled/$SITE
-		sudo unlink $nginx_sites_enabled/$SITE
-	fi
 	if [[ -e $nginx_sites_available/$SITE ]] ; then
 		sudo rm -f $nginx_sites_available/$SITE 
+	fi
+	if [[ -e $nginx_sites_enabled/$SITE ]] ; then
+		sudo unlink $nginx_sites_enabled/$SITE
+		sudo rm -f $nginx_sites_enabled/$SITE
 	fi
 	echo "Nginx cleaned up!"
 
