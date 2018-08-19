@@ -225,6 +225,9 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 	echo "Server block created and site ($SITE) is successfully installed over HTTPS!"
 # check for `publish` command
 elif [[ "$COMMAND" = "unpublish" ]] ; then
+
+	nginx_sites_available=/etc/nginx/sites-available
+	nginx_sites_enabled=/etc/nginx/sites-enabled
 	
 	# ex: api.example.com (or) docs.example.com
 	read -p "Enter the site name to unpublish [ex: api.example.com (or) docs.example.com]: " -e SITE
