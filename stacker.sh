@@ -198,7 +198,8 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 
 	# check for nginx ssl param snippet, else pull it in
 	if [[ ! -e /etc/nginx/snippets/ssl-params.conf ]] ; then
-		sudo curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-ssl-snippet.conf > /etc/nginx/snippets/ssl-params.conf
+		curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-ssl-snippet.conf > nginx-ssl.tmp
+		sudo mv nginx-ssl.tmp /etc/nginx/snippets/ssl-params.conf
 	fi
 
 	echo "Creating NGINX HTTPS server block.."
@@ -269,7 +270,7 @@ elif [[ "$COMMAND" = "reinstall" ]] ; then
 	echo "Deleting stacker.."
 	sudo rm -f /usr/local/bin/stacker
 	sudo rm -f /usr/bin/stacker
-	echo "Stacker deleted.."
+	echo "Stacker deleted!"
 	curl -sSL https://raw.githubusercontent.com/mystroken/stacker/master/install.sh | bash
 # end of valid commands
 else
