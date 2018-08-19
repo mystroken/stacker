@@ -228,12 +228,16 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 
 	nginx_sites_available=/etc/nginx/sites-available
 	nginx_sites_enabled=/etc/nginx/sites-enabled
+	SITE=$2
 	
-	# ex: api.example.com (or) docs.example.com
-	read -p "Enter the site name to unpublish [ex: api.example.com (or) docs.example.com]: " -e SITE
+	# check if any command is provided
+	if [[ -z $SITE ]] ; then
+		echo "Err: No site provided. Check the docs at $github_repo"
+		exit 1
+	fi
 
 	# Remove logs
-	if [[ ! -e "/var/log/nginx/$SITE" ]] ; then
+	if [[ -e "/var/log/nginx/$SITE" ]] ; then
 		echo "Delete site logs.."
 		sudo rm -rf /var/log/nginx/$SITE
 		echo "Site logs deleted!"

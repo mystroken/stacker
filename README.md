@@ -64,7 +64,7 @@ You can check the SSL strength at [SSL Labs](https://www.ssllabs.com/ssltest/), 
 If it happens that you made a mistake and you want to delete a site (just removing the nginx mapping) or for whatever other possible reason, use the command below:
 
 ```
-stacker unpublish
+stacker unpublish site_name
 ```
 
 
