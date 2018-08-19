@@ -241,13 +241,13 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 
 	# Remove Nginx site
 	echo "Clean up Nginx.."
-	if [[ -e $nginx_sites_available/$SITE ]] ; then
-		sudo rm -f $nginx_sites_available/$SITE 
-	fi
 	if [[ -e $nginx_sites_enabled/$SITE ]] ; then
 		sudo rm -f $nginx_sites_enabled/$SITE
 	fi
 	echo "Nginx cleaned up!"
+	if [[ -e $nginx_sites_available/$SITE ]] ; then
+		sudo rm -f $nginx_sites_available/$SITE 
+	fi
 
 	# Remove ssl certificates
 	if [[ ! -e "/var/log/nginx/$SITE" ]] ; then
@@ -264,8 +264,7 @@ elif [[ "$COMMAND" = "reinstall" ]] ; then
 	echo "Deleting stacker.."
 	sudo rm -f /usr/local/bin/stacker
 	sudo rm -f /usr/bin/stacker
-
-	echo "Reinstall stacker.."
+	echo "Stacker deleted.."
 	curl -sSL https://raw.githubusercontent.com/mystroken/stacker/master/install.sh | bash
 # end of valid commands
 else
