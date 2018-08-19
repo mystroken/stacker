@@ -243,11 +243,12 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 	echo "Clean up Nginx.."
 	if [[ -e $nginx_sites_enabled/$SITE ]] ; then
 		sudo rm -f $nginx_sites_enabled/$SITE
+		sudo unlink $nginx_sites_enabled/$SITE
 	fi
-	echo "Nginx cleaned up!"
 	if [[ -e $nginx_sites_available/$SITE ]] ; then
 		sudo rm -f $nginx_sites_available/$SITE 
 	fi
+	echo "Nginx cleaned up!"
 
 	# Remove ssl certificates
 	if [[ ! -e "/var/log/nginx/$SITE" ]] ; then
