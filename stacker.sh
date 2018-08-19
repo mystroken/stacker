@@ -258,6 +258,15 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 
 	sudo service nginx reload
 	echo "Site ($SITE) is successfully unpublished!"
+
+# reinstall stacker
+elif [[ "$COMMAND" = "reinstall" ]] ; then
+	echo "Deleting stacker.."
+	sudo rm -f /usr/local/bin/stacker
+	sudo rm -f /usr/bin/stacker
+
+	echo "Reinstall stacker.."
+	curl -sSL https://raw.githubusercontent.com/mystroken/stacker/master/install.sh | bash
 # end of valid commands
 else
 	echo "Err: Invalid command. Check the docs at $github_repo"
