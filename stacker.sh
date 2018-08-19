@@ -188,7 +188,7 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 	done
 
 	# generate the certificate
-	sudo letsencrypt certonly -n --agree-tos --webroot -w $APP_PATH -d $SITE -m $EMAIL
+	sudo letsencrypt certonly -n --agree-tos --webroot -w $APP_PATH -d $SITE -d www.$SITE -m $EMAIL --expand
 
 	# generate dhparam cert if not found
 	if [[ ! -e /etc/ssl/certs/dhparam-2048.pem ]] ; then
