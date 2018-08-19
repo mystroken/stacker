@@ -18,7 +18,7 @@ fi
 
 echo "Installing Stacker.."
 
-sudo curl -sSL https://raw.githubusercontent.com/santoshbaggam/stacker/master/stacker.sh > stacker
+sudo curl -sSL https://raw.githubusercontent.com/mystroken/stacker/master/stacker.sh > stacker
 
 sudo chmod +x ./stacker
 

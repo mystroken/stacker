@@ -5,36 +5,36 @@ Things get way more complicated for developers when it comes to pushing their ap
 Stacker makes configuring web servers a cinch, letting developers focus on what they're good at.
 
 You can install the following stack with the help of Stacker build:
-* Languages
-    * PHP (7.0)
-    * PHP-FPM (7.0)
-    * Python (3.6)
-    * Nodejs (6.1) (coming soon)
-* Databases (coming soon)
-    * MySQL
-    * PostgreSQL
-    * MongoDB
-    * Redis
-    * Memcached
-* Web Servers
-    * NGINX
-    * Apache (coming soon)
-* SSL
-    * Letsencrypt
-    * Webroot
-    * Certbot (coming soon)
-* Tools
-    * Git
-    * cURL
-    * wget
-    * Unzip
-* And more..
 
+- Languages
+  - PHP (7.2)
+  - PHP-FPM (7.2)
+  - Python (3.6)
+  - Nodejs (6.1) (coming soon)
+- Databases (coming soon)
+  - MySQL
+  - PostgreSQL
+  - MongoDB
+  - Redis
+  - Memcached
+- Web Servers
+  - NGINX
+  - Apache (coming soon)
+- SSL
+  - Letsencrypt
+  - Webroot
+  - Certbot (coming soon)
+- Tools
+  - Git
+  - cURL
+  - wget
+  - Unzip
+- And more..
 
 ### Installation
 
-``` curl
-curl -sSL https://raw.githubusercontent.com/santoshbaggam/stacker/master/install.sh | bash
+```curl
+curl -sSL https://raw.githubusercontent.com/mystroken/stacker/master/install.sh | bash
 ```
 
 ### Build
@@ -52,12 +52,12 @@ In order to map a new site, say example.com (or) ex.example.com, over **HTTP** o
 ```curl
 stacker site
 ```
+
 Simply follow the prompts to seamlessly map your domains/sub-domains to your application with optional free SSL certificate installation.
 
 > Note: Make sure to provide the publicly serving folder to serve the application.
 
 You can check the SSL strength at [SSL Labs](https://www.ssllabs.com/ssltest/), which ideally analyses and show **A+** rating.
-
 
 ## Contributing
 
@@ -66,7 +66,6 @@ If you have any contributions on how to expand this package, don't hesitate to f
 
 I'm no expert and I strongly sense that there are many ways to improve the existing ideas.
 Any [open issues](https://github.com/santoshbaggam/stacker/issues) can be discussed and solved together! :)
-
 
 ## License
 

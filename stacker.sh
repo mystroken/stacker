@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-github_repo=https://github.com/santoshbaggam/stacker
+github_repo=https://github.com/mystroken/stacker
 
 COMMAND=$1
 
@@ -37,19 +37,27 @@ if [[ "$COMMAND" = "build" ]] ; then
 	echo "NGINX is installed successfully!"
 
 	# install php and php utils
-	echo "Installing PHP/modules.."
-	sudo apt-get install -qq php php-mysql php-pgsql php-sqlite3 php-curl \
-		php-gd php-gmp php-mcrypt php-mbstring php-memcached \
-		php-dompdf php-zip php-xml
-	echo "PHP/modules are installed successfully!"
+	echo "Installing PHP.."
+	# Add Repository which gives us the latest php version 7.2
+	sudo add-apt-repository ppa:ondrej/php
+	sudo apt-get update
+	sudo apt-get install -qq php7.2 php7.2-fpm
+	echo "PHP 7.2 installed successfully!"
+
+	# install php utils
+	echo "Installing PHP modules.."
+	sudo apt-get install -qq php-pear php7.2-mysql php7.2-pgsql php7.2-sqlite3 php7.2-curl \
+		 php7.2-dev php7.2-gd php7.2-gmp php7.2-mcrypt php7.2-mbstring php7.2-memcached \
+		 php7.2-dompdf php7.2-zip php7.2-xml
+	echo "PHP modules are installed successfully!"
 
 	# secure php to not to execute the closest file it finds
 	echo "Securing PHP.."
-	sudo sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/7.0/fpm/php.ini
+	sudo sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/' /etc/php/7.2/fpm/php.ini
 	echo "PHP is secured!"
 
 	# restart php-fpm
-	sudo service php7.0-fpm restart
+	sudo service php7.2-fpm restart
 
 	# install composer
 	echo "Installing Composer.."
@@ -127,7 +135,7 @@ elif [[ "$COMMAND" = "site" ]] ; then
 	fi
 
 	# pull http server block
-	curl -s -L https://raw.githubusercontent.com/santoshbaggam/stacker/master/scripts/nginx-http-server-block.conf > $SITE.tmp
+	curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-http-server-block.conf > $SITE.tmp
 
 	sudo sed -i "s/server_name {SITE};/server_name $SITE;/" $SITE.tmp
 	sudo sed -i "s|root {PATH};|root $APP_PATH;|" $SITE.tmp
@@ -190,12 +198,12 @@ elif [[ "$COMMAND" = "site" ]] ; then
 
 	# check for nginx ssl param snippet, else pull it in
 	if [[ ! -e /etc/nginx/snippets/ssl-params.conf ]] ; then
-		curl -s -L https://raw.githubusercontent.com/santoshbaggam/stacker/master/scripts/nginx-ssl-snippet.conf > /etc/nginx/snippets/ssl-params.conf
+		curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-ssl-snippet.conf > /etc/nginx/snippets/ssl-params.conf
 	fi
 
 	echo "Creating NGINX HTTPS server block.."
 	# pull https server block
-	curl -s -L https://raw.githubusercontent.com/santoshbaggam/stacker/master/scripts/nginx-https-server-block.conf > $SITE.tmp
+	curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-https-server-block.conf > $SITE.tmp
 
 	sudo sed -i "s|ssl_certificate /etc/letsencrypt/live/{SITE}/fullchain.pem;|ssl_certificate /etc/letsencrypt/live/$SITE/fullchain.pem;|" $SITE.tmp
 	sudo sed -i "s|ssl_certificate_key /etc/letsencrypt/live/{SITE}/privkey.pem;|ssl_certificate_key /etc/letsencrypt/live/$SITE/privkey.pem;|" $SITE.tmp
