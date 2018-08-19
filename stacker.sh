@@ -198,7 +198,7 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 
 	# check for nginx ssl param snippet, else pull it in
 	if [[ ! -e /etc/nginx/snippets/ssl-params.conf ]] ; then
-		curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-ssl-snippet.conf > /etc/nginx/snippets/ssl-params.conf
+		sudo curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-ssl-snippet.conf > /etc/nginx/snippets/ssl-params.conf
 	fi
 
 	echo "Creating NGINX HTTPS server block.."
