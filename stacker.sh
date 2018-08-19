@@ -256,6 +256,7 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 	if [[ -e "/etc/letsencrypt/live/$SITE" ]] ; then
 		echo "Remove SSL Certificates.."
 		sudo rm -rf /etc/letsencrypt/live/$SITE
+		sudo rm -rf /etc/letsencrypt/renewal/$SITE
 		echo "SSL certificates removed!"
 	fi
 
