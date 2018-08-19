@@ -50,7 +50,7 @@ stacker build
 In order to map a new site, say example.com (or) ex.example.com, over **HTTP** or **HTTPS**, use the below command.
 
 ```curl
-stacker site
+stacker publish
 ```
 
 Simply follow the prompts to seamlessly map your domains/sub-domains to your application with optional free SSL certificate installation.
@@ -58,6 +58,16 @@ Simply follow the prompts to seamlessly map your domains/sub-domains to your app
 > Note: Make sure to provide the publicly serving folder to serve the application.
 
 You can check the SSL strength at [SSL Labs](https://www.ssllabs.com/ssltest/), which ideally analyses and show **A+** rating.
+
+
+
+If it happens that you made a mistake and you want to delete a site (just removing the nginx mapping) or for whatever other possible reason, use the command below:
+
+```
+stacker unpublish
+```
+
+
 
 ## Contributing
 

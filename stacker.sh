@@ -67,8 +67,8 @@ if [[ "$COMMAND" = "build" ]] ; then
 	echo "Composer is installed successfully!"
 
 	echo "Stack built successfully!"
-# check for `site` command
-elif [[ "$COMMAND" = "site" ]] ; then
+# check for `publish` command
+elif [[ "$COMMAND" = "publish" ]] ; then
 	# check for git
 	git --version > /dev/null 2>&1
 	GIT_IS_INSTALLED=$?
@@ -223,6 +223,38 @@ elif [[ "$COMMAND" = "site" ]] ; then
 	sudo service nginx reload
 
 	echo "Server block created and site ($SITE) is successfully installed over HTTPS!"
+# check for `publish` command
+elif [[ "$COMMAND" = "unpublish" ]] ; then
+	
+	# ex: api.example.com (or) docs.example.com
+	read -p "Enter the site name to unpublish [ex: api.example.com (or) docs.example.com]: " -e SITE
+
+	# Remove logs
+	if [[ ! -e "/var/log/nginx/$SITE" ]] ; then
+		echo "Delete site logs.."
+		sudo rm -rf /var/log/nginx/$SITE
+		echo "Site logs deleted!"
+	fi
+
+	# Remove Nginx site
+	echo "Clean up Nginx.."
+	if [[ -e $nginx_sites_available/$SITE ]] ; then
+		sudo rm -f $nginx_sites_available/$SITE 
+	fi
+	if [[ -e $nginx_sites_enabled/$SITE ]] ; then
+		sudo rm -f $nginx_sites_enabled/$SITE
+	fi
+	echo "Nginx cleaned up!"
+
+	# Remove ssl certificates
+	if [[ ! -e "/var/log/nginx/$SITE" ]] ; then
+		echo "Remove SSL Certificates.."
+		sudo rm -rf /etc/letsencrypt/live/$SITE
+		echo "SSL certificates removed!"
+	fi
+
+	sudo service nginx reload
+	echo "Site ($SITE) is successfully unpublished!"
 # end of valid commands
 else
 	echo "Err: Invalid command. Check the docs at $github_repo"
