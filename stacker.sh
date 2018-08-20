@@ -273,7 +273,7 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 	echo "Nginx cleaned up!"
 
 	# Remove ssl certificates
-	if [[ -e "/etc/letsencrypt/live/$SITE" ]] ; then
+	if [[ -d "/etc/letsencrypt/live/$SITE" ]] ; then
 		echo "Remove SSL Certificates.."
 		sudo rm -rf /etc/letsencrypt/live/$SITE
 		sudo rm -f /etc/letsencrypt/renewal/$SITE.conf
