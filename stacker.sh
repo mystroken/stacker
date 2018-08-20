@@ -96,13 +96,21 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 		exit 1
 	fi
 
-	# ex: api.example.com (or) docs.example.com
-	read -p "Enter the site name [ex: api.example.com (or) docs.example.com]: " -e SITE
+	# ex: api.example.com (or) example.com
+	read -p "Enter the site name [ex: api.example.com (or) example.com]: " -e SITE
 
 	if [[ -z $SITE ]] ; then
-		echo "Err: Site like \`api.example.com\` or \`docs.example.com\` is required. Check the docs at $github_repo"
+		echo "Err: Site like \`api.example.com\` or \`example.com\` is required. Check the docs at $github_repo"
 		exit 1
 	fi
+
+	# Domain or Sub domain?
+	# ask for SSL enabling
+	read -p "Is the site a sub domain? (Y/n): " -n 1 -er SITE_IS_SUBDOMAIN
+
+	while [[ ! "$SITE_IS_SUBDOMAIN" =~ ^y|Y|n|N$ ]]; do
+		read -p "Invalid entry, is the site a sub domain?? (Y/n): " -n 1 -er SITE_IS_SUBDOMAIN
+	done
 
 	# absolute path to public folder. ex: /var/www/path/to/example-app/public
 	read -p "Enter the absolute path to public folder [ex: /var/www/path/to/example-app/public]: " -e APP_PATH
@@ -137,7 +145,11 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 	# pull http server block
 	curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-http-server-block.conf > $SITE.tmp
 
-	sudo sed -i "s/server_name {SITE};/server_name $SITE;/" $SITE.tmp
+	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; do
+		sudo sed -i "s/server_name {SITE};/server_name $SITE;/" $SITE.tmp
+	else
+		sudo sed -i "s/server_name {SITE};/server_name $SITE www.$SITE;/" $SITE.tmp
+	fi
 	sudo sed -i "s|root {PATH};|root $APP_PATH;|" $SITE.tmp
 	sudo sed -i "s|access_log $nginx_logs/{SITE}/access.log;|access_log $nginx_logs/$SITE/access.log;|" $SITE.tmp
 	sudo sed -i "s|error_log $nginx_logs/{SITE}/error.log;|error_log $nginx_logs/$SITE/error.log;|" $SITE.tmp
@@ -188,7 +200,11 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 	done
 
 	# generate the certificate
-	sudo letsencrypt certonly -n --agree-tos --webroot -w $APP_PATH -d $SITE -d www.$SITE -m $EMAIL --expand
+	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; do
+		sudo letsencrypt certonly -n --agree-tos --expand --webroot -w $APP_PATH -d $SITE -m $EMAIL
+	else
+		sudo letsencrypt certonly -n --agree-tos --expand --webroot -w $APP_PATH -d $SITE -d www.$SITE -m $EMAIL
+	fi
 
 	# generate dhparam cert if not found
 	if [[ ! -e /etc/ssl/certs/dhparam-2048.pem ]] ; then
@@ -208,7 +224,11 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 
 	sudo sed -i "s|ssl_certificate /etc/letsencrypt/live/{SITE}/fullchain.pem;|ssl_certificate /etc/letsencrypt/live/$SITE/fullchain.pem;|" $SITE.tmp
 	sudo sed -i "s|ssl_certificate_key /etc/letsencrypt/live/{SITE}/privkey.pem;|ssl_certificate_key /etc/letsencrypt/live/$SITE/privkey.pem;|" $SITE.tmp
-	sudo sed -i "s/server_name {SITE};/server_name $SITE;/" $SITE.tmp
+	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; do
+		sudo sed -i "s/server_name {SITE};/server_name $SITE;/" $SITE.tmp
+	else
+		sudo sed -i "s/server_name {SITE};/server_name $SITE www.$SITE;/" $SITE.tmp
+	fi
 	sudo sed -i "s|root {PATH};|root $APP_PATH;|" $SITE.tmp
 	sudo sed -i "s|access_log $nginx_logs/{SITE}/access.log;|access_log $nginx_logs/$SITE/access.log;|" $SITE.tmp
 	sudo sed -i "s|error_log $nginx_logs/{SITE}/error.log;|error_log $nginx_logs/$SITE/error.log;|" $SITE.tmp
