@@ -145,7 +145,7 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 	# pull http server block
 	curl -s -L https://raw.githubusercontent.com/mystroken/stacker/master/scripts/nginx-http-server-block.conf > $SITE.tmp
 
-	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; do
+	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; then
 		sudo sed -i "s/server_name {SITE};/server_name $SITE;/" $SITE.tmp
 	else
 		sudo sed -i "s/server_name {SITE};/server_name $SITE www.$SITE;/" $SITE.tmp
@@ -200,7 +200,7 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 	done
 
 	# generate the certificate
-	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; do
+	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; then
 		sudo letsencrypt certonly -n --agree-tos --expand --webroot -w $APP_PATH -d $SITE -m $EMAIL
 	else
 		sudo letsencrypt certonly -n --agree-tos --expand --webroot -w $APP_PATH -d $SITE -d www.$SITE -m $EMAIL
@@ -224,7 +224,7 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 
 	sudo sed -i "s|ssl_certificate /etc/letsencrypt/live/{SITE}/fullchain.pem;|ssl_certificate /etc/letsencrypt/live/$SITE/fullchain.pem;|" $SITE.tmp
 	sudo sed -i "s|ssl_certificate_key /etc/letsencrypt/live/{SITE}/privkey.pem;|ssl_certificate_key /etc/letsencrypt/live/$SITE/privkey.pem;|" $SITE.tmp
-	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; do
+	if [[ "$SITE_IS_SUBDOMAIN" =~ ^y|Y$ ]]; then
 		sudo sed -i "s/server_name {SITE};/server_name $SITE;/" $SITE.tmp
 	else
 		sudo sed -i "s/server_name {SITE};/server_name $SITE www.$SITE;/" $SITE.tmp
@@ -276,7 +276,7 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 	if [[ -e "/etc/letsencrypt/live/$SITE" ]] ; then
 		echo "Remove SSL Certificates.."
 		sudo rm -rf /etc/letsencrypt/live/$SITE
-		sudo rm -rf /etc/letsencrypt/renewal/$SITE
+		sudo rm -f /etc/letsencrypt/renewal/$SITE.conf
 		echo "SSL certificates removed!"
 	fi
 
