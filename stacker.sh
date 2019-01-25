@@ -224,7 +224,7 @@ elif [[ "$COMMAND" = "publish" ]] ; then
 	sudo service nginx reload
 
 	echo "Server block created and site ($SITE) is successfully installed over HTTPS!"
-# check for `publish` command
+# check for `unpublish` command
 elif [[ "$COMMAND" = "unpublish" ]] ; then
 
 	nginx_sites_available=/etc/nginx/sites-available
@@ -263,6 +263,32 @@ elif [[ "$COMMAND" = "unpublish" ]] ; then
 
 	sudo service nginx reload
 	echo "Site ($SITE) is successfully unpublished!"
+
+# check for `renew-ssl` command
+elif [[ "$COMMAND" = "renew-ssl" ]] ; then
+
+	SITE=$2
+	
+	# check if any command is provided
+	if [[ -z $SITE ]] ; then
+		echo "Err: No site provided. Check the docs at $github_repo"
+		exit 1
+	fi
+
+	# prompt email id, to which ssl cert. expiration mail shoots out
+	read -p "Enter your E-mail (used for SSL expiry reminders, etc) : " -e EMAIL
+
+	while [[ -z "$EMAIL" ]]; do
+		read -p "Invalid E-mail, enter again: " -e EMAIL
+	done
+
+	# Stop NGINX first
+	sudo service nginx stop
+	
+	letsencrypt certonly --force-renew -d $SITE -d www.$SITE -m $EMAIL
+
+	sudo service nginx restart
+	echo "SSL Certificates for ($SITE) successfully updated!"
 
 # reinstall stacker
 elif [[ "$COMMAND" = "reinstall" ]] ; then
