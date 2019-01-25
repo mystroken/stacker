@@ -67,6 +67,19 @@ If it happens that you made a mistake and you want to delete a site (just removi
 stacker unpublish server_name
 ```
 
+To reinstall stacker
+
+```shell
+stacker reinstall
+```
+
+To renew SSL certificates
+
+```shell
+stacker renew-ssl server_name
+```
+
+
 
 
 ## Contributing
